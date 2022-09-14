@@ -1,0 +1,65 @@
+SELECT *
+FROM CovidData
+WHERE continent is not null
+
+
+-- Now I'm going to select the neccesary data we'll be using
+
+Select location, date, total_cases, new_cases, total_deaths, population
+FROM CovidData
+WHERE continent is not null
+
+
+-- Total Cases vs Total Deaths in Canada
+-- This will show how likely you are from dying from Covid within Canada
+
+
+
+Select Location, date, total_cases,total_deaths, ROUND((total_deaths/total_cases)*100,2) as DeathPercentage
+FROM CovidData
+WHERE location like '%Canada%'
+AND total_cases is not null
+AND total_deaths is not null
+
+
+--Total cases vs population
+--This will show us the percentage of people who contracted Covid within Canada
+
+select location, date, population, total_cases, ROUND ((total_cases/population) *100,2) as PercentagePopulationContracted
+from CovidData
+where location like '%Canada%'
+
+
+-- Countries with highest infection rate comparted to population
+
+select location, population, MAX(total_cases) AS HighestInfectionCount, MAX((total_cases/population) *100) as PercentagePopulationContracted
+from CovidData
+--where location like '%Canada%'
+GROUP BY location, population
+ORDER BY PercentagePopulationContracted desc
+
+
+-- this will show countries with the highest death count per population
+
+Select location, MAX(Total_deaths) as TotalDeathCount
+FROM CovidData
+WHERE location is not null
+GROUP BY location
+Order by TotalDeathCount desc
+
+
+-- now lets look at the total death count per continent
+
+Select continent, MAX(Total_deaths) as TotalDeathCount
+FROM CovidData
+WHERE continent is not null
+GROUP BY continent
+Order by TotalDeathCount desc
+
+
+--Global numbers of the total cases vs total deaths and get the DeathPercentage
+
+
+Select SUM(new_cases) as total_cases, SUM(new_deaths) as total_deaths, SUM(new_deaths)/SUM(New_Cases)*100 as DeathPercentage
+From CovidData
+where continent is not null
