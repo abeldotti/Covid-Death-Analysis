@@ -60,6 +60,7 @@ Order by TotalDeathCount desc
 --Global numbers of the total cases vs total deaths and get the DeathPercentage
 
 
-Select SUM(new_cases) as total_cases, SUM(new_deaths) as total_deaths, SUM(new_deaths)/SUM(New_Cases)*100 as DeathPercentage
+Select SUM(new_cases) as total_cases, SUM(new_deaths) as total_deaths, ROUND(SUM(new_deaths)/SUM(New_Cases)*100,2) as GlobalDeathPercentage
 From CovidData
-where continent is not null
+where continent is not null 
+
